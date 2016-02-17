@@ -27,55 +27,55 @@ gen_socket is released under GPLv2.
 
 ## Compile ##
 
-1) git clone https://github.com/max-feng/otp_gen_socket.git
-2) cd gen_socket && make
+	git clone https://github.com/max-feng/otp_gen_socket.git
+	cd gen_socket && make
 
 ## Example ##
 ### server side ###
 * start gen_socket application
 
-   max@max-gentoo ~/Code/gen_socket $ erl -pa ./ebin/
-   Erlang/OTP 17 [erts-6.4] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
-
-   Eshell V6.4  (abort with ^G)
-   1> application:start(gen_socket).
-   BindPoller=true, BindSocketPolicy=1
+	max@max-gentoo ~/Code/gen_socket $ erl -pa ./ebin/
+	Erlang/OTP 17 [erts-6.4] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+	
+	Eshell V6.4  (abort with ^G)
+	1> application:start(gen_socket).
+	BindPoller=true, BindSocketPolicy=1
 
 * listen
 
-   2> {ok, L } = gen_socket:listen(8008, []).
-      {ok,{140091975271824,<<>>}}
+	2> {ok, L } = gen_socket:listen(8008, []).
+	{ok,{140091975271824,<<>>}}
 
 * accept
    When client side connect to 8008, accept() will return a gen_socket:
 
-   3> {ok, S} = gen_socket:accept(L).
-      {ok,{140091975272200,<<>>}}
+	3> {ok, S} = gen_socket:accept(L).
+	{ok,{140091975272200,<<>>}}
 
 * send
 
-   4> gen_socket:send(S, <<"hello">>).
-      ok
+	4> gen_socket:send(S, <<"hello">>).
+	ok
 
 ### client side ###
 * start gen_socket application
 
-    max@max-gentoo ~/Code/gen_socket $ erl -pa ./ebin/
-    Erlang/OTP 17 [erts-6.4] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
-
-    Eshell V6.4  (abort with ^G)
-    1> application:start(gen_socket).
-    BindPoller=true, BindSocketPolicy=1
+	max@max-gentoo ~/Code/gen_socket $ erl -pa ./ebin/
+	Erlang/OTP 17 [erts-6.4] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+	
+	Eshell V6.4  (abort with ^G)
+	1> application:start(gen_socket).
+	BindPoller=true, BindSocketPolicy=1
 
 * connect
 
-    2> {ok, S} = gen_socket:connect("127.0.0.1", 8008, []).
-       {ok,{140532682066528,<<>>}}
+	2> {ok, S} = gen_socket:connect("127.0.0.1", 8008, []).
+	{ok,{140532682066528,<<>>}}
 
 * recv
 
-    3> gen_socket:recv(S, 0).
-       {ok,<<"hello">>}
+	3> gen_socket:recv(S, 0).
+	{ok,<<"hello">>}
 
 ## Design ##
 
