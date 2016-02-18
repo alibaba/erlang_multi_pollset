@@ -1,0 +1,8 @@
+{application,gen_socket,
+             [{description,[]},
+              {vsn,"1.0.3"},
+              {modules,[]},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {mod,{gen_socket_app,[]}},
+              {env,[{bind_scheduler,true},{bind_socket_policy,1}]}]}.
