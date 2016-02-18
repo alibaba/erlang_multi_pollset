@@ -1,4 +1,4 @@
-> README for OTP_GEN_SOCKET
+> README for erlang_multi_pollset 
  ========================================================================
 
 ## TABLE OF CONTENT ##
@@ -13,6 +13,7 @@
 We all know gen_tcp is a standard network module in Erlang world.
 But Erlang vm supports only one PollSet which means there is at most one
 os thread handling events in the same time.
+
 The way only one PollSet in the vm is not scalable, especially with a rapid growth of NIC bandwidth and CPU cores on one single machine.
 
 In order to make full use of multi-core in Eralng network programming, we develop gen_socket module.
@@ -27,7 +28,7 @@ gen_socket is released under GPLv2.
 
 ## Compile ##
 ```
-	git clone https://github.com/max-feng/otp_gen_socket.git
+	git clone https://github.com/max-feng/erlang_multi_pollset.gi
 	cd gen_socket && make
 ```
 ## Example ##
