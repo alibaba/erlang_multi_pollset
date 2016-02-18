@@ -93,7 +93,8 @@ Watcher Thread is an os thread. When there is no IO events in PollSet, Watcher T
 
 In Erlang VM all schedulers are in follower/leader mode. There is at most one scheduler thread handing IO events.
 
-### Multi PollSet ###
+### New Architecture ###
+#### Multi PollSet ####
 ![enter description here][2]
 
 In gen_socket module, there is a PollSet per scheduler.
@@ -107,7 +108,7 @@ When evrun() return zero IO events, Poller Process will give up the right to use
 
 Watcher Thread call evrun() in blocking way. So when there is no IO events in PollSet, Watch Thread will be blocked and in interruptible state; When  there are some new IO events coming, Watch Thread will be waked up, and send msg to Poller Process. Poller Process will enter into next loop.
 
-### Binding ###
+#### Binding ####
 ![enter description here][3]
 
 Process's socket managed by PollSet. 
