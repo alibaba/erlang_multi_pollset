@@ -5,7 +5,8 @@
 
 * [Introduction](#introduction)
 * [Compile](#compile)
-* [Example](#example)
+* [Example0](#example0)
+* [Example1](#example1)
 * [Design](#Design)
 
 ## Introduction ##
@@ -31,7 +32,7 @@ gen_socket is released under GPLv2.
 	git clone https://github.com/max-feng/erlang_multi_pollset.gi
 	cd gen_socket && make
 ```
-## Example ##
+## Example0 ##
 ### server side ###
 * start gen_socket application
 ```
@@ -78,6 +79,27 @@ gen_socket is released under GPLv2.
 	3> gen_socket:recv(S, 0).
 	{ok,<<"hello">>}
 ```
+
+## Example1 ##
+I write a simple echo server and echo client under test folder.
+### compile server and client ###
+```
+cd test/ && erlc *.erl
+```
+### run server ###
+When a new connection established, echo server will spawn a process to echo msg.
+Echo server runs in active = false mode.
+
+```
+cd test && erl -pa ../ebin/ -noshell -s simple_server start
+```
+### run client ###
+Echo client will connect to echo server, and send 5 <<"hello">>.
+Echo client runs in active = true mode.
+```
+cd test && erl -pa ../ebin/  -noshell -s simple_client start -s init stop
+```
+
 ## Design ##
 
 The gen_socket supports one PollSet per scheduler. The key concept is PollSet struct, Poller Process and Watcher Thread.
