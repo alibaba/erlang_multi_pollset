@@ -46,7 +46,6 @@
 
 #define TCP_MAX_PACKET_SIZE 0x4000000  /* 64 M */
 
-#define MAX_BINARY_LIST_LENGTH 1024
 #define MAX_BINARY_LIST_SIZE 0x10000000 /* 256M */
 /* How to bind with PollSet
  * 0: Round-Robin
@@ -77,7 +76,6 @@ static ERL_NIF_TERM TermActiveSetting;
 static ERL_NIF_TERM TermFD;
 static ERL_NIF_TERM TermBindPolicy;
 static ERL_NIF_TERM TermSocketOnline;
-static ERL_NIF_TERM TermBinaryListLength;
 static ERL_NIF_TERM TermBinaryListSize;
 
 static ErlNifResourceType *ResTypeSock;
@@ -1223,7 +1221,6 @@ do_iolist_to_binary_list(ErlNifEnv *env, const ERL_NIF_TERM iolist)
     ErlNifBinary bin;
     ERL_NIF_TERM result = enif_make_list(env, 0);
     int total = 0;
-    int length = 0;
 
     s.push(iolist);
     while(!s.empty()) {
@@ -1247,8 +1244,6 @@ do_iolist_to_binary_list(ErlNifEnv *env, const ERL_NIF_TERM iolist)
                 if (bytes.size() > 0) {
                     if (total + bytes.size() > MAX_BINARY_LIST_SIZE)
                         return TermBinaryListSize;
-                    if (length++ > MAX_BINARY_LIST_LENGTH)
-                        return TermBinaryListLength;
                     if (!enif_alloc_binary(bytes.size(), &bin))
                         return make_posix_error(env, ENOMEM);
                     memcpy(bin.data, (char*)&bytes[0], bytes.size());
@@ -1261,8 +1256,6 @@ do_iolist_to_binary_list(ErlNifEnv *env, const ERL_NIF_TERM iolist)
                     if (bin.size > 0) {
                         if (total + bin.size > MAX_BINARY_LIST_SIZE)
                             return TermBinaryListSize;
-                        if (length++ > MAX_BINARY_LIST_LENGTH)
-                            return TermBinaryListLength;
                         result = enif_make_list_cell(env, car, result);
                         total += bin.size;
                     }
@@ -2419,7 +2412,6 @@ static int on_load(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info)
     TermFD = enif_make_atom(env, "fd");
     TermBindPolicy = enif_make_atom(env, "bind_policy");
     TermSocketOnline = enif_make_atom(env, "socket_online");
-    TermBinaryListLength = enif_make_atom(env, "binary_list_length");
     TermBinaryListSize = enif_make_atom(env, "binary_list_size");
 
     bind_policy = BIND_POLICY_RR;
