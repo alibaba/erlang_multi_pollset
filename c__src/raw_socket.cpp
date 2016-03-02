@@ -2090,6 +2090,8 @@ nif_socket_info(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
     char atom[64];
     int poller_id;
     int fd;
+    int ev_is_reading;
+    int ev_is_writing;
 
     PREPARE_GET_FD
 
@@ -2102,9 +2104,18 @@ nif_socket_info(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
         return enif_make_tuple2(env, TermId, enif_make_int(env, fd));
     }
 
+    poller_id = handle->pollset + 1;
     if (!strcmp(atom, "bind_id")) {
-        poller_id = handle->pollset + 1;
         return enif_make_tuple2(env, TermSocketBindId, enif_make_int(env, poller_id));
+    }
+
+    if (!strcmp(atom, "ev_stat")) {
+        ev_is_reading = (int)ev_is_active(&handle->ev_read);
+        ev_is_writing = (int)ev_is_active(&handle->ev_write);
+        return enif_make_tuple4(env, enif_make_int(env, handle->active_setting),
+                                enif_make_int(env, ev_is_reading),
+                                enif_make_int(env, ev_is_writing),
+                                enif_make_int(env, poller_id));
     }
 
     return enif_make_badarg(env);
